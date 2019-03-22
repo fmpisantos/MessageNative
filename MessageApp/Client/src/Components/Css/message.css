@@ -1,0 +1,51 @@
+html,body{
+    background-color: lightsteelblue;
+}
+
+.mine{
+    text-align: right;
+    background-color: whitesmoke;
+    color:black;
+    word-wrap:break-word;
+    text-justify: inter-word;
+}
+
+.other{
+    text-align: left;
+    background-color: black;
+    color: whitesmoke;
+    word-wrap:break-word;
+    text-justify: inter-word;
+}
+
+.boldText{
+    font-weight: bold;
+}
+
+.messageContainer{
+    padding-top: 2%;
+    padding-bottom: 2%;
+    
+}
+
+.messageInput{
+    width: 110%;
+    background-color: whitesmoke;
+    color: black;
+}
+
+.sendButton{
+    display: block;
+    width: 100%;
+    border: none;
+    padding: 3px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+    background-color: black;
+    color: whitesmoke;
+}
+
+.spacingMessage{
+    padding:5px;
+}

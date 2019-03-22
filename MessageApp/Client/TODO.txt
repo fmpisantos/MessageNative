@@ -1,0 +1,7 @@
+TODO:
+	-AddUsers mid conv(adding write to user array od chats but not array list od users)
+	-Send Mensage not working in server side
+	-Check if multi users in chat works
+	-delete users from chat beaware if delete the user that is logged close chat(this will make chatupdate check if the user still has access to chat)
+
+Probably more TODO .. Test it then do the security and improvements to searches in server

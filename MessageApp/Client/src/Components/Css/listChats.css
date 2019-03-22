@@ -1,0 +1,54 @@
+body{
+		background-color: #483D3D;
+}
+
+.logout{
+	margin-top:2%;
+	}
+
+.listContainer{
+	padding: 2%;
+	margin-top:2%;
+	background-color: #C4C4C4;
+}
+
+.elementList{
+	margin:1px;
+	padding:2%;
+	border-style:solid;
+	border-color: #483D3D;
+	text-decoration: none;
+	color: #483D3D;  
+}
+
+.elementList:link{
+	text-decoration: none;
+}
+
+.elementList:visited{
+	text-decoration: none;
+}
+
+.elementList:hover{
+	background-color: #7D4D4D;
+	color: #483D3D; 
+}
+
+.closeButton{
+	float: right;
+	border-radius: 50%;
+}
+
+.addButton{
+	float: left;
+	border-radius:50%;
+}
+
+.chatContainer{
+	margin-top:2%;
+	padding-top: 1%;
+	padding-right: 2%;
+	padding-left: 2%;
+	padding-bottom: 2%;
+	background-color: #C4C4C4;
+}
