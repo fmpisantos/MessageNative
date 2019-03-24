@@ -22,7 +22,14 @@ html,body{
     font-weight: bold;
 }
 
+.mensageScroll{
+	overflow-y: auto;
+    overflow-x: hidden;
+    height: 75vh;
+}
+
 .messageContainer{
+    
     padding-top: 2%;
     padding-bottom: 2%;
     

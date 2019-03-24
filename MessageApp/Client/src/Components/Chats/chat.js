@@ -21,7 +21,7 @@ class chat extends Component {
 	}
 
 	componentDidMount() {
-  	this.interval = setInterval(() => {this.props.getConv(this.props.chat.id)}, 2000);
+	  this.interval = setInterval(() => {this.props.getConv(this.props.chat.id)}, 2000);
 	}
 	componentWillUnmount() {
   	clearInterval(this.interval);
@@ -39,7 +39,9 @@ class chat extends Component {
 						<button className="closeButton" onClick={this.props.clearChatLogged}>&times;</button>
 						<button className="addButton" onClick={this.toggleAddUser.bind(this)}  >+</button>
 						<br/>
+						<div >
 						<MessageContainner serverUrl={this.props.serverUrl} user={this.props.user} list={this.props.list}/>
+						</div>
     				<Input serverUrl={this.props.serverUrl} addItem={this.props.addItem}/>
 					</div>
 					):(

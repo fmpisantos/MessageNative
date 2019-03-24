@@ -27,7 +27,7 @@ componentDidUpdate(){
       <div className="container">
         <div className="row">
           <div className="col-11 col-sm-10 col-xs-10">
-            <input className="messageInput" type="text" ref={ref => this.myTextInput = ref} autofocus="true" id="inputMessage" />
+            <input className="messageInput" type="text" ref={ref => this.myTextInput = ref} autocomplete="off" autofocus="true" id="inputMessage" />
             </div>
             <div className="col-1 col-sm-2 col-xs-2">
             <button type="submit" className="sendButton">SEND</button>

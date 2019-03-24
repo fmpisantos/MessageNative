@@ -10,6 +10,16 @@ body{
 	padding: 2%;
 	margin-top:2%;
 	background-color: #C4C4C4;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 75vh;
+
+}
+
+.mensageScroll{
+	overflow-y: auto;
+    overflow-x: hidden;
+    height: 75vh;
 }
 
 .elementList{
