@@ -11,6 +11,7 @@ export default class MessageContainer extends React.Component {
     this.state={
       inputFocus: false
     }
+    console.log(this.props.list);
   }
 
   inputFocus(flag){
@@ -29,10 +30,8 @@ export default class MessageContainer extends React.Component {
     }}>
         <View style={{margin:10}}>
         {this.props.list.map((item,key)=>{
-
-            console.log(item.user);
           return(
-            <Message key={key} name={item.user} message={item.message} mine={item.user=="Filipe"?true:false}/>
+            <Message key={key} name={item.name} message={item.mensage} mine={item.email==this.props.loggedUser.email?true:false}/>
           )
         })}
         </View>

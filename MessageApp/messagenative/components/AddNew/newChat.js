@@ -15,10 +15,7 @@ export default class NewChat extends React.Component {
       email : "",
       list:[
         {
-            email: "filipesantos.sporting@gmail.com"
-        },
-        {
-            email: "pipas.sporting@gmail.com"
+          email : this.props.loggedUser.email
         }
       ]
     }
@@ -38,11 +35,25 @@ export default class NewChat extends React.Component {
     });
   }
 
+  emailAlreadyIn(){
+    for(let i = 0; i < this.state.list;i++){
+      if(this.state.list[i].email == this.state.email)
+        return false;
+    }
+    return true;
+  }
+
   addEmail(){
     let l = this.state.list;
-    l.push(this.state.email);
+    if(!this.emailAlreadyIn()){
+    let newEmail = {email : this.state.email};
+    l.push(newEmail);
     this.setState({
       list:l
+    });
+    }
+    this.setState({
+      email : ""
     });
   }
 
@@ -53,19 +64,50 @@ export default class NewChat extends React.Component {
   }
 
   submit(){
-    console.log("Submit");
     this.props.changeCase("list");
+    let ll = [];
+    for(let i = 0;i<this.state.list.length;i++)
+      ll.push(this.state.list[i].email);
+    let send = {
+		"name" : this.state.name,
+		"userEmails": ll,
+		"mensages": []
+	}
+  console.log(ll);
+	if(this.state.name.length==0)
+		alert("Please Enter one valid chat name");
+	else if(this.state.list.length<1)
+		alert("Please add someone to the chat");
+	else{
+			fetch(this.props.serverUrl+"/newChat/",{
+				method: "POST",
+				mode: "cors",
+				credentials: 'include',
+				body: JSON.stringify(send)
+			})	
+				.then(result => {return JSON.parse(result._bodyText)})
+					.then(json => {this.props.goToChat(json.id)})
+						.catch(error => {console.log(error)});
+		}
   }
 
   goToList(){
     this.props.changeCase("list");
   }
 
+  cruzOuNao(key){
+    if(key!=0){
+      return(<TouchableOpacity style={styles.buttonX} onPress={this.removeEmail.bind(this,key)}>
+                <Text style={styles.buttonText}>&times;</Text>
+              </TouchableOpacity>)
+    }
+  }
+
   render() {
     return (
       <View >
             <GoBack func={this.goToList.bind(this)}/>
-            <LogOut/>
+            <LogOut accessToken={this.props.accessToken} logout={this.props.logout}/>
             <View style={styles.containerNewUser}>
                 <Text style={{alignSelf:"center",paddingTop:10,fontSize:15}}>Chat Name</Text>
                 <TextInput
@@ -83,9 +125,7 @@ export default class NewChat extends React.Component {
                     return(
                       <View style={{flexDirection: 'row',right:40,padding:2}}>
                         <Text style={styles.emailsList}>{item.email}</Text>
-                        <TouchableOpacity style={styles.buttonX} onPress={this.removeEmail.bind(this,key)}>
-                          <Text style={styles.buttonText}>&times;</Text>
-                        </TouchableOpacity>
+                        {this.cruzOuNao(key)}
                       </View>
                     )
                   })}
@@ -93,7 +133,7 @@ export default class NewChat extends React.Component {
               <TextInput
                     style={{margin:20,borderColor: 'black', borderWidth: 1, backgroundColor:"#857676"}}
                     onChangeText={(email) => this.updateEmail.bind(this)(email)}
-                    value={this.state.name}
+                    value={this.state.email}
                     onSubmitEditing={this.addEmail.bind(this)}
                 />
                 <TouchableOpacity style={styles.button} onPress={this.submit.bind(this)}>

@@ -7,6 +7,13 @@ import Logout from '../NavBars/onlyLogout';
 import GoBack from '../NavBars/withOutPlus';
 
 export default class Chat extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      list : this.props.list
+    }
+    
+  }
 
 newUser(){
   this.props.changeCase("newUser");
@@ -16,13 +23,31 @@ list(){
   this.props.changeCase("list")
 }
 
+componentDidMount() {
+this.interval = setInterval(()=>{
+    fetch(this.props.serverUrl+'/?id='+this.props.id,{
+        mode:"cors",
+      })
+      .then(result => {return JSON.parse(result._bodyText)}) //returns the json so the next then gets it
+        .then(json => {
+          this.setState({list : json.mensages})
+        })
+        .catch(error=>console.error(error))
+  },2000);
+}
+
+componentWillUnmount() {
+    clearInterval(this.interval);
+}
+
   render() {
+    
     return (
       <View style={styles.containerChat}>
             <WithPlus func={this.newUser.bind(this)}/>
             <GoBack func={this.list.bind(this)}/>
-            <Logout/>
-            <MessageContainer sendMessage={this.props.sendMessage} list={this.props.list}/>
+            <Logout accessToken={this.props.accessToken} logout={this.props.logout}/>
+            <MessageContainer loggedUser={this.props.loggedUser} sendMessage={this.props.sendMessage} list={this.state.list}/>
       </View>
     );
   }

@@ -9,20 +9,14 @@ import Unlogged from './components/Logs/unlogged';
 
 // or any pure javascript modules available in npm
 import { Card } from 'react-native-paper';
-import firebase from "firebase";
-
-function initFirebase(){
-
-firebase.initializeApp({
-  apiKey: "AIzaSyDkuIsp07XLzpRhF4EQqUqKtXdV6Etk5bU",
-  authDomain: "messages-4197e.firebaseapp.com"
-});
 
 export default class App extends React.Component{
 
   constructor(props){
     super(props);
     this.state = {
+      id: 0,
+      accessToken: null,
       c : "unlogged",
       list:[
             {
@@ -40,18 +34,17 @@ export default class App extends React.Component{
       chat: 0,
       chatLogged : false,
       loggedUser: false,
-      serverUrl: "https://api.messagenative.com/"
+      serverUrl: "https://api.messagenative.com"
     }
   }
 
   goToChat(id){
       fetch(this.state.serverUrl+'/?id='+id,{
         mode:"cors",
-        credentials: 'include',
       })
-      .then(result => {return result.json()}) //returns the json so the next then gets it
+      .then(result => {return JSON.parse(result._bodyText)}) //returns the json so the next then gets it
         .then(json => {
-          this.setState({list : json.mensages,chat:json,chatLogged: true})
+          this.setState({id: id,list : json.mensages,chat:json,chatLogged: true,c:"chat"})
         })
         .catch(error=>console.error(error))
         return 0;
@@ -63,8 +56,10 @@ export default class App extends React.Component{
     });
   }
 
-  changeUserState(userUpdated){
+  changeUserState(userUpdated,accessToken){
     this.setState({
+      accessToken : accessToken,
+      c: "list",
       loggedUser : userUpdated,
       user : userUpdated.email
     });
@@ -72,6 +67,7 @@ export default class App extends React.Component{
 
   logout(){
     this.setState({
+      c : "unlogged",
       loggedUser : false,
       list : [],
       user: null,
@@ -79,7 +75,7 @@ export default class App extends React.Component{
     });
   }
 
-  sendMessage(message){
+  sendMessage(msg){
     this.setState({
       list: [...this.state.list, {
         email: this.state.user,
@@ -97,24 +93,21 @@ export default class App extends React.Component{
       mode: "cors",
       credentials: 'include',
       body: JSON.stringify(l)
-      })
-        .then(result =>{return result.json()})
-          .then(json=>{console.log(json);console.log(this.state.user)})
-            .catch(error =>{console.log(error)});
+      }).catch(error =>{console.log(error)});
   }
 
   updateCase(){
     switch(this.state.c){
       case "list": 
-        return(<ChatList goToChat={this.goToChat.bind(this)} changeCase={this.changeCase.bind(this)} list={this.state.listChats}/>)
+        return(<ChatList serverUrl={this.state.serverUrl} accessToken={this.state.accessToken} logout={this.logout.bind(this)} user={this.state.loggedUser} goToChat={this.goToChat.bind(this)} changeCase={this.changeCase.bind(this)} list={this.state.loggedUser.chats}/>)
       case "chat":
-        return (<Chat sendMessage={this.sendMessage.bind(this)} list={this.state.listChat} loggedUser="Filipe" changeCase={this.changeCase.bind(this)}/>)
+        return (<Chat id={this.state.id} serverUrl={this.state.serverUrl} accessToken={this.state.accessToken} logout={this.logout.bind(this)} sendMessage={this.sendMessage.bind(this)} list={this.state.list} loggedUser={this.state.loggedUser} changeCase={this.changeCase.bind(this)}/>)
       case "newUser":
-        return (<NewUser name="Chat 1" changeCase={this.changeCase.bind(this)}/>)
+        return (<NewUser goToChat={this.goToChat.bind(this)} serverUrl={this.state.serverUrl} accessToken={this.state.accessToken} logout={this.logout.bind(this)} name="Chat 1" changeCase={this.changeCase.bind(this)}/>)
       case "newChat":
-        return (<NewChat changeCase={this.changeCase.bind(this)}/>)
+        return (<NewChat goToChat={this.goToChat.bind(this)} serverUrl={this.state.serverUrl} accessToken={this.state.accessToken} logout={this.logout.bind(this)} changeCase={this.changeCase.bind(this)} loggedUser={this.state.loggedUser}/>)
       case "unlogged":
-        return (<Unlogged serverUrl={this.state.serverUrl} changeUserState={this.changeUserState.bind(this)} firebase={firebase}/>)
+        return (<Unlogged serverUrl={this.state.serverUrl} changeUserState={this.changeUserState.bind(this)}/>)
     }
   }
 

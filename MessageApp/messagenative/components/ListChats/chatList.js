@@ -7,21 +7,39 @@ import Plus from '../NavBars/withPlus';
 
 export default class ChatList extends React.Component {
 
+  constructor(props){
+    super(props);
+     this.state = {
+       list:[]
+     }
+  }
+
   newChat(){
-    console.log("newChat");
     this.props.changeCase("newChat");
+  }
+
+  componentDidMount = () =>{
+			fetch(this.props.serverUrl+"/getUserChats/?uid="+this.props.user.uid,{
+			})
+			.then(result => {return JSON.parse(result._bodyText)})
+				.then(json => {this.setState({list : json});})
+					.catch(error => console.log(error));
+	}
+
+  goToChat(i){
+    this.props.goToChat(this.state.list[i].id);
   }
 
   render() {
     return (
       <View>
-        <LogOut/>
+        <LogOut accessToken={this.props.accessToken} logout={this.props.logout}/>
         <Plus func={this.newChat.bind(this)}/>
         <View style={styles.containerList}>
           <ScrollView style={styles.containerList,{keyboardDismissMode:'on-drag'}}>
-          {this.props.list.map((item,key)=>{
+          {this.state.list.map((item,key)=>{
             return(
-            <ListElement goToChat={this.props.goToChat} name={item.name} key={key} />
+            <ListElement goToChat={this.goToChat.bind(this,key)} name={item.name} key={key} />
             )
           })}
           </ScrollView>

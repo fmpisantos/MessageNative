@@ -2,11 +2,22 @@ import * as React from 'react';
 import {TouchableOpacity, Text, View, StyleSheet, Dimensions } from 'react-native';
 import { Constants } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
+import * as Expo from "expo";
 
 export default class OnlyLogout extends React.Component {
   
-    logout(){
-    console.log("logout");
+    logout= async () => {
+      this.props.logout();
+      try{
+        const result = await Expo.Google.logOutAsync({accessToken:this.props.accessToken, iosClientId: "916703486908-9ufavhtuk0topi25pmqcibeb0qjjhekf.apps.googleusercontent.com" })
+       if (result.type === "success") {
+         console.log("Logout");
+      } else {
+        console.log("cancelled")
+      }
+    } catch (e) {
+      console.log("error", e)
+    } 
   }
 
   render() {

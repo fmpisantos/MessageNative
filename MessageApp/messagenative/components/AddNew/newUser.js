@@ -65,7 +65,7 @@ export default class NewUser extends React.Component {
     return (
       <View >
             <GoBack func={this.goToChat.bind(this)}/>
-            <LogOut/>
+            <LogOut accessToken={this.props.accessToken} logout={this.props.logout}/>
             <View style={styles.containerNewUser}>
                 <Text style={{alignSelf:"center",paddingTop:10,fontSize:15}}>Chat Name</Text>
                 <TextInput
